@@ -1,4 +1,6 @@
+import { AttendanceRecordsTable } from "@/components/attendanceRecordsTable";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -10,6 +12,11 @@ export default function Home() {
       <Link href="/admin">
         <p>管理者ページ</p>
       </Link>
+      <div>直近の出退勤リスト</div>
+      <Suspense fallback={<p>Loading...</p>}>
+        {/* @ts-expect-error Server Component */}
+        <AttendanceRecordsTable />
+      </Suspense>
     </main>
   );
 }
