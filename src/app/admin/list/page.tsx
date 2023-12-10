@@ -1,4 +1,5 @@
 import { EmployeeList } from "@/components/employeeList";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
@@ -12,10 +13,10 @@ const EmployeeListPage = () => {
           <EmployeeList />
         </Suspense>
         <Link href="/admin/register" className="py-4">
-          従業員を追加する
+          <Button>従業員を追加する</Button>
         </Link>
         <Link href="/admin" className="py-4">
-          前のページへ戻る
+          <Button variant="ghost">前のページへ戻る</Button>
         </Link>
       </div>
     </div>

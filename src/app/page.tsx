@@ -1,4 +1,5 @@
 import { AttendanceRecordsTable } from "@/components/attendanceRecordsTable";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -7,10 +8,10 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center gap-4 p-24">
       <div>Working Management App</div>
       <Link href="/managements" className="hover:underline">
-        出退勤の登録はこちら！
+        <Button variant="ghost">出退勤の登録はこちら！</Button>
       </Link>
-      <Link href="/admin" className="hover:underline">
-        管理者ページ
+      <Link href="/admin">
+        <Button variant="link">管理者ページ</Button>
       </Link>
 
       <Suspense fallback={<p>Loading...</p>}>
