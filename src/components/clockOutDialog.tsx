@@ -36,7 +36,9 @@ export function ClockOutDialog() {
           </DialogHeader>
           <div className="flex flex-col gap-8 py-8">
             <div className="grid w-full items-center gap-2">
-              <Label htmlFor="employeeName">名前を入力して下さい</Label>
+              <Label htmlFor="employeeName">
+                名前をフルネームで入力して下さい
+              </Label>
               <Input
                 className="w-full"
                 type="text"
