@@ -11,20 +11,21 @@ datasource db {
 }
 
 model Employee {
-  id        Int    @id @default(autoincrement())
-  name      String
-  email     String @unique
-  position  String
-  isAdmin   Boolean @default(false)
-  records   AttendanceRecord[]
+  id          String    @id @default(uuid())
+  name        String
+  email       String @unique
+  position    String
+  phoneNumber String?
+  isAdmin     Boolean @default(false)
+  records     AttendanceRecord[]
 }
 
 model AttendanceRecord {
-  id        Int      @id @default(autoincrement())
-  date      DateTime
-  startTime DateTime
-  endTime   DateTime?
-  breakTime Int?   
-  employee  Employee @relation(fields: [employeeId], references: [id])
-  employeeId Int
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime?
+  breakTime   Int?   
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  employeeId  String
 }
