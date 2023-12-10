@@ -4,7 +4,12 @@ import { RecordsTableByDate } from "@/components/recordsTableByDate";
 import { DatePicker } from "@/components/datePicker";
 
 const AdminPage = () => {
-  const now = new Date();
+  const pastSevenDays = Array.from({ length: 3 }, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    return date;
+  });
+
   return (
     <main className="flex min-h-screen flex-col items-center gap-4 p-24">
       <Link href="/" className="hover:underline">
@@ -14,12 +19,14 @@ const AdminPage = () => {
       <Link href="admin/list" className="hover:underline">
         従業員一覧
       </Link>
+      <DatePicker />
 
-      <Suspense fallback={<p>Loading...</p>}>
-        {/* @ts-expect-error Server Component */}
-        <RecordsTableByDate selectedDate={now} />
-      </Suspense>
-      <DatePicker></DatePicker>
+      {pastSevenDays.map((date, index) => (
+        <Suspense key={index}>
+          {/* @ts-expect-error Server Component */}
+          <RecordsTableByDate selectedDate={date} />
+        </Suspense>
+      ))}
     </main>
   );
 };
