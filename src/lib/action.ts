@@ -1,6 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
 export const recordCheckIn = async (data: FormData) => {
   const employeeName = data.get("employeeName") as string;
@@ -73,16 +74,19 @@ export const recordCheckOut = async (data: FormData) => {
 export const addEmployee = async (data: FormData) => {
   const name = data.get("employeeName") as string;
   const email = data.get("employeeEmail") as string;
+  const phoneNumber = data.get("employeePhoneNumber") as string;
   const position = data.get("employeePosition") as string;
 
   const employee = await prisma.employee.create({
     data: {
       name: name,
       email: email,
+      phoneNumber: phoneNumber,
       position: position,
     },
   });
   revalidatePath("/admin");
+  redirect("/admin/list");
 
   if (!employee) {
     throw new Error("Failed to add employee");

@@ -10,7 +10,7 @@ import prisma from "@/lib/prisma";
 import { format } from "date-fns";
 
 type Employee = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   position: string;
@@ -24,7 +24,7 @@ type AttendanceRecord = {
   endTime: Date | null;
   breakTime: number | null;
   employee?: Employee;
-  employeeId: number;
+  employeeId: string;
 };
 
 type ClockInRecordsListProps = {
@@ -56,7 +56,7 @@ const RecordsTableByDate = async ({
     endTime: Date | null,
     breakTime?: number | null
   ) => {
-    if (!endTime) return "";
+    if (!endTime) return "-";
 
     const start = startTime.getTime();
     const end = endTime.getTime();
@@ -115,7 +115,9 @@ const RecordsTableByDate = async ({
                     })
                   : "-"}
               </TableCell>
-              <TableCell>{`${record.breakTime}分`}</TableCell>
+              <TableCell>
+                {record.breakTime ? `${record.breakTime}分` : "-"}
+              </TableCell>
               <TableCell>
                 {calculateWorkingHours(
                   record.startTime,

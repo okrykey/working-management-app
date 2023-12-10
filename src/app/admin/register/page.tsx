@@ -13,12 +13,11 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { addEmployee } from "@/lib/action";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 const RegisterPage = () => {
   const { toast } = useToast();
-  const router = useRouter();
+
   return (
     <main className="gap-4 p-24 h-screen">
       <div className="text-center">従業員登録画面</div>
@@ -44,6 +43,16 @@ const RegisterPage = () => {
             id="employeeEmail"
             name="employeeEmail"
             placeholder="メールアドレスを記入"
+          />
+        </div>
+        <div className="grid w-full items-center gap-2">
+          <Label htmlFor="employeeName">従業員の電話番号を記入</Label>
+          <Input
+            className="w-full"
+            type="text"
+            id="employeePhoneNumber"
+            name="employeePhoneNumber"
+            placeholder="電話番号を記入"
           />
         </div>
 
@@ -75,7 +84,6 @@ const RegisterPage = () => {
             toast({
               title: "従業員を登録しました",
             });
-            router.back();
           }}
         >
           従業員を登録する

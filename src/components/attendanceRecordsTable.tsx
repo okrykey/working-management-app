@@ -10,7 +10,7 @@ import {
 import prisma from "@/lib/prisma";
 
 type Employee = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   position: string;
@@ -24,7 +24,7 @@ type AttendanceRecord = {
   endTime: Date | null;
   breakTime: number | null;
   employee?: Employee;
-  employeeId: number;
+  employeeId: string;
 };
 
 const AttendanceRecordsTable = async () => {
@@ -43,7 +43,7 @@ const AttendanceRecordsTable = async () => {
     endTime: Date | null,
     breakTime?: number | null
   ) => {
-    if (!endTime) return "";
+    if (!endTime) return "-";
 
     const start = startTime.getTime();
     const end = endTime.getTime();
@@ -59,7 +59,7 @@ const AttendanceRecordsTable = async () => {
   return (
     <div className="w-2/3">
       <Table className="text-center">
-        <TableCaption>従業員勤怠管理リスト</TableCaption>
+        <TableCaption>直近の出退勤リスト</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-1/6 text-center">名前</TableHead>
@@ -99,7 +99,9 @@ const AttendanceRecordsTable = async () => {
                     })
                   : "-"}
               </TableCell>
-              <TableCell>{`${record.breakTime}分`}</TableCell>
+              <TableCell>
+                {record.breakTime ? `${record.breakTime}分` : "-"}
+              </TableCell>
               <TableCell>
                 {calculateWorkingHours(
                   record.startTime,
