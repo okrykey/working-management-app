@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/table";
 import prisma from "@/lib/prisma";
 import { format } from "date-fns";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 type Employee = {
   id: string;
@@ -83,52 +85,62 @@ const RecordsTableByDate = async ({
           の勤怠記録
         </h2>
       </div>
-      <Table className="text-center">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/5 text-center">名前</TableHead>
-            <TableHead className="w-1/5 text-center">出勤時間</TableHead>
-            <TableHead className="w-1/5 text-center">退勤時間</TableHead>
-            <TableHead className="w-1/5 text-center">休憩時間</TableHead>
-            <TableHead className="w-1/5 text-center">稼働時間</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredRecords.map((record) => (
-            <TableRow key={record.id}>
-              <TableCell className="font-medium">
-                {record.employee?.name}
-              </TableCell>
-              <TableCell>
-                {record.startTime.toLocaleTimeString("ja-JP", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })}
-              </TableCell>
-              <TableCell>
-                {record.endTime
-                  ? record.endTime.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })
-                  : "-"}
-              </TableCell>
-              <TableCell>
-                {record.breakTime ? `${record.breakTime}分` : "-"}
-              </TableCell>
-              <TableCell>
-                {calculateWorkingHours(
-                  record.startTime,
-                  record.endTime,
-                  record.breakTime
-                )}
-              </TableCell>
+      {filteredRecords.length > 0 ? (
+        <Table className="text-center">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-1/6 text-center">名前</TableHead>
+              <TableHead className="w-1/6 text-center">出勤時間</TableHead>
+              <TableHead className="w-1/6 text-center">退勤時間</TableHead>
+              <TableHead className="w-1/6 text-center">休憩時間</TableHead>
+              <TableHead className="w-1/6 text-center">稼働時間</TableHead>
+              <TableHead className="w-1/6 text-center">修正</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredRecords.map((record) => (
+              <TableRow key={record.id}>
+                <TableCell className="font-medium">
+                  {record.employee?.name}
+                </TableCell>
+                <TableCell>
+                  {record.startTime.toLocaleTimeString("ja-JP", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })}
+                </TableCell>
+                <TableCell>
+                  {record.endTime
+                    ? record.endTime.toLocaleTimeString("ja-JP", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })
+                    : "-"}
+                </TableCell>
+                <TableCell>
+                  {record.breakTime ? `${record.breakTime}分` : "-"}
+                </TableCell>
+                <TableCell>
+                  {calculateWorkingHours(
+                    record.startTime,
+                    record.endTime,
+                    record.breakTime
+                  )}
+                </TableCell>
+                <TableCell>
+                  <Link href={`/admin/${record.id}/edit`}>
+                    <Button size="sm">修正</Button>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <p className="text-center text-gray-500">Not found</p>
+      )}
     </div>
   );
 };

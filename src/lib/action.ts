@@ -86,9 +86,34 @@ export const addEmployee = async (data: FormData) => {
     },
   });
   revalidatePath("/admin");
-  redirect("/admin/list");
 
   if (!employee) {
     throw new Error("Failed to add employee");
   }
+  redirect("/admin/list");
+};
+
+export const updateRecord = async (id: number, data: FormData) => {
+  const startTime = data.get("startTime") as string;
+  const endTime = data.get("endTime") as string;
+  const breakTime = data.get("breakTime") as string;
+
+  const parsedStartTime = startTime && new Date(startTime);
+  const parsedEndTime = endTime ? new Date(endTime) : null;
+
+  const parsedBreakTime = breakTime ? parseInt(breakTime, 10) : null;
+
+  await prisma.attendanceRecord.update({
+    where: {
+      id,
+    },
+    data: {
+      startTime: parsedStartTime,
+      endTime: parsedEndTime,
+      breakTime: parsedBreakTime,
+    },
+  });
+
+  revalidatePath("/admin");
+  redirect("/admin");
 };
