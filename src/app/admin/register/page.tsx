@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { addEmployee } from "@/lib/action";
 import React from "react";
@@ -33,6 +34,7 @@ const RegisterPage = () => {
             id="employeeName"
             name="employeeName"
             placeholder="名前を記入"
+            required
           />
         </div>
         <div className="grid w-full items-center gap-2">
@@ -43,6 +45,7 @@ const RegisterPage = () => {
             id="employeeEmail"
             name="employeeEmail"
             placeholder="メールアドレスを記入"
+            required
           />
         </div>
         <div className="grid w-full items-center gap-2">
@@ -53,6 +56,7 @@ const RegisterPage = () => {
             id="employeePhoneNumber"
             name="employeePhoneNumber"
             placeholder="電話番号を記入"
+            required
           />
         </div>
 
@@ -83,6 +87,14 @@ const RegisterPage = () => {
           onClick={() => {
             toast({
               title: "従業員を登録しました",
+            });
+          }}
+          onError={() => {
+            toast({
+              variant: "destructive",
+              title: "エラーが発生しました",
+              description: "もう一度試してみて下さい",
+              action: <ToastAction altText="Try again">Try again</ToastAction>,
             });
           }}
         >

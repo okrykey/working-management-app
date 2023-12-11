@@ -1,7 +1,7 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -13,17 +13,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { recordCheckIn } from "@/lib/action";
+import { useState } from "react";
+import { ToastAction } from "./ui/toast";
 
 export function ClockInDialog() {
   const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [employeeName, setEmployeeName] = useState("");
   const today = new Date();
   const dateString = today.toLocaleDateString("ja-JP", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   });
+
+  const handleClick = () => {
+    if (employeeName) {
+      toast({
+        title: `出勤を記録しました！\u{1F60E}`,
+        description: `出勤時刻：${dateString}`,
+      });
+
+      setOpen(false);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "名前を入力してください",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">出勤する</Button>
       </DialogTrigger>
@@ -45,23 +67,30 @@ export function ClockInDialog() {
                 id="employeeName"
                 name="employeeName"
                 placeholder="名前を入力"
+                required
+                value={employeeName}
+                onChange={(e) => setEmployeeName(e.target.value)}
               />
             </div>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                type="submit"
-                onClick={() => {
-                  toast({
-                    title: "出勤を記録しました",
-                    description: `出勤時刻：${dateString}`,
-                  });
-                }}
-              >
-                出勤する
-              </Button>
-            </DialogClose>
+            <Button
+              type="submit"
+              onClick={handleClick}
+              onError={() => {
+                toast({
+                  variant: "destructive",
+                  title: "エラーが発生しました",
+                  description: "もう一度試してみて下さい",
+                  action: (
+                    <ToastAction altText="Try again">Try again</ToastAction>
+                  ),
+                });
+                setOpen(false);
+              }}
+            >
+              出勤する
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

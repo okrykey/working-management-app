@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -13,15 +12,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { recordCheckOut } from "@/lib/action";
+import { useState } from "react";
+import { ToastAction } from "./ui/toast";
 
 export function ClockOutDialog() {
   const { toast } = useToast();
+  const [employeeName, setEmployeeName] = useState("");
+  const [breakTime, setBreakTime] = useState("");
   const today = new Date();
   const dateString = today.toLocaleDateString("ja-JP", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   });
+
+  const handleClick = () => {
+    if (employeeName && breakTime) {
+      toast({
+        title: `退勤を記録しました！\u{1F60E}`,
+        description: `退勤時刻：${dateString}`,
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "エラーが発生しました",
+        description: "全ての項目を入力してください",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -45,9 +65,10 @@ export function ClockOutDialog() {
                 id="employeeName"
                 name="employeeName"
                 placeholder="名前を記入"
+                value={employeeName}
+                onChange={(e) => setEmployeeName(e.target.value)}
               />
             </div>
-
             <div className="grid w-full items-center gap-2">
               <Label htmlFor="breakTime">休憩時間</Label>
               <Input
@@ -56,23 +77,15 @@ export function ClockOutDialog() {
                 id="breakTime"
                 name="breakTime"
                 placeholder="休憩時間を記入"
+                value={breakTime}
+                onChange={(e) => setBreakTime(e.target.value)}
               />
             </div>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                type="submit"
-                onClick={() => {
-                  toast({
-                    title: "退勤を記録しました",
-                    description: `退勤時刻：${dateString}`,
-                  });
-                }}
-              >
-                退勤する
-              </Button>
-            </DialogClose>
+            <Button type="submit" onClick={handleClick}>
+              退勤する
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
