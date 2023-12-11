@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { supabase } from "./supabase";
 
 export const recordCheckIn = async (data: FormData) => {
   const employeeName = data.get("employeeName") as string;
@@ -114,6 +115,16 @@ export const updateRecord = async (id: number, data: FormData) => {
     },
   });
 
+  revalidatePath("/admin");
+  redirect("/admin");
+};
+
+export const deleteRecord = async (id: number) => {
+  await prisma.attendanceRecord.delete({
+    where: {
+      id,
+    },
+  });
   revalidatePath("/admin");
   redirect("/admin");
 };

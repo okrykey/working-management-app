@@ -1,7 +1,18 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateRecord } from "@/lib/action";
+import { deleteRecord, updateRecord } from "@/lib/action";
 
 import Link from "next/link";
 import React from "react";
@@ -26,15 +37,16 @@ const formatDateTime = (date?: Date | null) => {
 const RecordEditPage = async ({ params }: { params: { recordId: string } }) => {
   const id = Number(params.recordId);
   const updateRecordWithId = updateRecord.bind(null, id);
+  const deleteRecordWithId = deleteRecord.bind(null, id);
   const records = await prisma.attendanceRecord.findUnique({
     where: {
       id,
     },
   });
+
   return (
     <main className="gap-4 p-24 h-screen">
-      <div className="text-center">従業員登録画面</div>
-      <Link href="/admin">戻る</Link>
+      <div className="text-center font-bold ">出退勤編集画面</div>
       <form
         className="flex flex-col items-center justify-center gap-8 max-w-xl py-10 m-auto"
         action={updateRecordWithId}
@@ -71,8 +83,38 @@ const RecordEditPage = async ({ params }: { params: { recordId: string } }) => {
             }
           />
         </div>
-        <Button type="submit">出退勤を修正する</Button>
+        <div className="flex flex-row gap-4 justify-center align-middle">
+          <Button type="submit">出退勤を修正する</Button>
+          <Link href="/admin">
+            <Button variant="outline">戻る</Button>
+          </Link>
+        </div>
       </form>
+
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button className="mx-auto block" variant="outline" type="submit">
+            削除
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>本当に削除しますか?</AlertDialogTitle>
+            <AlertDialogDescription>
+              この操作は取り消すことができません。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>キャンセル</AlertDialogCancel>
+            <form
+              className="flex flex-row justify-center"
+              action={deleteRecordWithId}
+            >
+              <AlertDialogAction type="submit">削除</AlertDialogAction>
+            </form>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </main>
   );
 };
