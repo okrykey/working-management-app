@@ -28,7 +28,7 @@ type Employee = {
   id: string;
   name: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   position: string;
 };
 
@@ -36,7 +36,7 @@ const EmployeeEditPage = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const updateEmployeeWithId = updateEmployee.bind(null, id);
   const deleteEmployeeWithId = deleteEmployee.bind(null, id);
-  const employee: Employee = await prisma.employee.findUnique({
+  const employee: Employee | null = await prisma.employee.findUnique({
     where: {
       id,
     },
@@ -56,7 +56,7 @@ const EmployeeEditPage = async ({ params }: { params: { id: string } }) => {
             type="text"
             id="startTime"
             name="startTime"
-            defaultValue={employee.name}
+            defaultValue={employee?.name}
           />
         </div>
         <div className="grid w-full items-center gap-2">
@@ -66,7 +66,7 @@ const EmployeeEditPage = async ({ params }: { params: { id: string } }) => {
             type="email"
             id="endTime"
             name="endTime"
-            defaultValue={employee.email}
+            defaultValue={employee?.email}
           />
         </div>
         <div className="grid w-full items-center gap-2">
@@ -76,13 +76,13 @@ const EmployeeEditPage = async ({ params }: { params: { id: string } }) => {
             type="text"
             id="breakTime"
             name="breakTime"
-            defaultValue={employee.phoneNumber}
+            defaultValue={employee?.phoneNumber ? employee?.phoneNumber : ""}
           />
         </div>
         <Select
           name="employeePosition"
           required
-          defaultValue={employee.position}
+          defaultValue={employee?.position}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="雇用形態を選択" />

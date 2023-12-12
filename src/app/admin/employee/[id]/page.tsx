@@ -15,8 +15,8 @@ type Employee = {
   id: string;
   name: string;
   email: string;
+  phoneNumber: string | null;
   position: string;
-  isAdmin: boolean;
 };
 
 type AttendanceRecord = {
@@ -37,7 +37,7 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
   const records = await prisma.attendanceRecord.findMany({
     where: { employeeId: params.id },
   });
-  const employee = await prisma.employee.findUnique({
+  const employee: Employee | null = await prisma.employee.findUnique({
     where: { id: params.id },
   });
 
@@ -144,10 +144,10 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="font-medium">{employee.name}</TableCell>
-                <TableCell>{employee.email}</TableCell>
-                <TableCell>{employee.phoneNumber}</TableCell>
-                <TableCell>{employee.position}</TableCell>
+                <TableCell className="font-medium">{employee?.name}</TableCell>
+                <TableCell>{employee?.email}</TableCell>
+                <TableCell>{employee?.phoneNumber}</TableCell>
+                <TableCell>{employee?.position}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

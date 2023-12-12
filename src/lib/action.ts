@@ -9,14 +9,8 @@ const schema = z.object({
   employeeName: z.string().max(10),
 });
 
-type State =
-  | {
-      message: string | null;
-    }
-  | undefined;
-
 export const verifyEmployeeName = async (employeeName: string) => {
-  const employee = await prisma.employee.findUnique({
+  const employee = await prisma.employee.findFirst({
     where: {
       name: employeeName,
     },
