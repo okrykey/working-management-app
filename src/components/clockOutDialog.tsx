@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,36 +12,28 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { recordCheckOut } from "@/lib/action";
+import { recordCheckOut, validateEmployeeName } from "@/lib/action";
 import { useState } from "react";
 import { ToastAction } from "./ui/toast";
+import { useFormState } from "react-dom";
+
+const initialState = {
+  message: null,
+};
 
 export function ClockOutDialog() {
   const { toast } = useToast();
-  const [employeeName, setEmployeeName] = useState("");
   const [breakTime, setBreakTime] = useState("");
+  const [employeeNameValidateState, validateEmployeeNameAction] = useFormState(
+    validateEmployeeName,
+    initialState
+  );
   const today = new Date();
   const dateString = today.toLocaleDateString("ja-JP", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   });
-
-  const handleClick = () => {
-    if (employeeName && breakTime) {
-      toast({
-        title: `退勤を記録しました！\u{1F60E}`,
-        description: `退勤時刻：${dateString}`,
-      });
-    } else {
-      toast({
-        variant: "destructive",
-        title: "エラーが発生しました",
-        description: "全ての項目を入力してください",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
-      });
-    }
-  };
 
   return (
     <Dialog>
@@ -67,27 +60,57 @@ export function ClockOutDialog() {
                 id="employeeName"
                 name="employeeName"
                 placeholder="名前を記入"
-                value={employeeName}
-                onChange={(e) => setEmployeeName(e.target.value)}
+                onBlur={(e) => {
+                  validateEmployeeNameAction(e.target.value);
+                }}
               />
+              {employeeNameValidateState?.message && (
+                <p className="text-xs pl-1 text-red-400">
+                  {employeeNameValidateState.message}
+                </p>
+              )}
             </div>
             <div className="grid w-full items-center gap-2">
-              <Label htmlFor="breakTime">休憩時間</Label>
+              <Label htmlFor="breakTime">休憩時間を入力して下さい</Label>
               <Input
                 className="w-full"
-                type="text"
+                type="number"
                 id="breakTime"
                 name="breakTime"
-                placeholder="休憩時間を記入"
+                placeholder="休憩時間(分)"
                 value={breakTime}
                 onChange={(e) => setBreakTime(e.target.value)}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" onClick={handleClick}>
-              退勤する
-            </Button>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                onClick={() => {
+                  toast({
+                    title: `退勤を記録しました！\u{1F60E}`,
+                    description: `出勤時刻：${dateString}`,
+                  });
+                }}
+                onError={() => {
+                  toast({
+                    variant: "destructive",
+                    title: "エラーが発生しました",
+                    description: "もう一度試してみて下さい",
+                    action: (
+                      <ToastAction altText="Try again">Try again</ToastAction>
+                    ),
+                  });
+                }}
+                disabled={
+                  employeeNameValidateState.message ===
+                  "※従業員の登録がありません。"
+                }
+              >
+                退勤する
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>

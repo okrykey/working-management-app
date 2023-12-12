@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -12,8 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { recordCheckIn } from "@/lib/action";
-import { useState } from "react";
+import { recordCheckIn, validateEmployeeName } from "@/lib/action";
 import { ToastAction } from "./ui/toast";
 import { useFormState } from "react-dom";
 
@@ -23,10 +23,10 @@ const initialState = {
 
 export function ClockInDialog() {
   const { toast } = useToast();
-  const [open, setOpen] = useState(false);
-  const [employeeName, setEmployeeName] = useState("");
-  const [state, formAction] = useFormState(recordCheckIn, initialState);
-
+  const [employeeNameValidateState, validateEmployeeNameAction] = useFormState(
+    validateEmployeeName,
+    initialState
+  );
   const today = new Date();
   const dateString = today.toLocaleDateString("ja-JP", {
     hour: "2-digit",
@@ -34,25 +34,8 @@ export function ClockInDialog() {
     hour12: false,
   });
 
-  const handleClick = () => {
-    if (employeeName) {
-      toast({
-        title: `出勤を記録しました！\u{1F60E}`,
-        description: `出勤時刻：${dateString}`,
-      });
-
-      setOpen(false);
-    } else {
-      toast({
-        variant: "destructive",
-        title: "名前を入力してください",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
-      });
-    }
-  };
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button size="lg" className="font-bold font-lg text-md">
           出勤する
@@ -60,7 +43,7 @@ export function ClockInDialog() {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
-        <form action={formAction}>
+        <form action={recordCheckIn}>
           <DialogHeader>
             <DialogTitle>出勤登録</DialogTitle>
             <DialogDescription>出勤状態を記入して下さい。</DialogDescription>
@@ -77,30 +60,45 @@ export function ClockInDialog() {
                 name="employeeName"
                 placeholder="名前を入力"
                 required
-                value={employeeName}
-                onChange={(e) => setEmployeeName(e.target.value)}
+                onBlur={(e) => {
+                  validateEmployeeNameAction(e.target.value);
+                }}
               />
-              {state?.message && <p>{state.message}</p>}
+              {employeeNameValidateState?.message && (
+                <p className="text-xs pl-1 text-red-400">
+                  {employeeNameValidateState.message}
+                </p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              onClick={handleClick}
-              onError={() => {
-                toast({
-                  variant: "destructive",
-                  title: "エラーが発生しました",
-                  description: "もう一度試してみて下さい",
-                  action: (
-                    <ToastAction altText="Try again">Try again</ToastAction>
-                  ),
-                });
-                setOpen(false);
-              }}
-            >
-              出勤する
-            </Button>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                onClick={() => {
+                  toast({
+                    title: `出勤を記録しました！\u{1F60E}`,
+                    description: `出勤時刻：${dateString}`,
+                  });
+                }}
+                onError={() => {
+                  toast({
+                    variant: "destructive",
+                    title: "エラーが発生しました",
+                    description: "もう一度試してみて下さい",
+                    action: (
+                      <ToastAction altText="Try again">Try again</ToastAction>
+                    ),
+                  });
+                }}
+                disabled={
+                  employeeNameValidateState.message ===
+                  "※従業員の登録がありません。"
+                }
+              >
+                出勤する
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>

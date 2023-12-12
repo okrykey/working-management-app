@@ -3,31 +3,71 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { supabase } from "./supabase";
+import { z } from "zod";
 
-export const recordCheckIn = async (data: FormData) => {
-  const employeeName = data.get("employeeName") as string;
-  const now = new Date();
+const schema = z.object({
+  employeeName: z.string().max(10),
+});
 
-  const employee = await prisma.employee.findFirst({
+type State =
+  | {
+      message: string | null;
+    }
+  | undefined;
+
+export const verifyEmployeeName = async (employeeName: string) => {
+  const employee = await prisma.employee.findUnique({
     where: {
       name: employeeName,
     },
   });
 
-  if (employee) {
-    await prisma.attendanceRecord.create({
-      data: {
-        employeeId: employee.id,
-        startTime: now,
-        endTime: null,
-        date: now,
+  if (!employee) {
+    throw new Error("EmployeeName is invalided");
+  }
+};
+
+export const validateEmployeeName = async (
+  prevState: { message: string | null },
+  value: string
+) => {
+  try {
+    schema.parse({ EmployeeName: value });
+    await verifyEmployeeName(value);
+    return { message: null };
+  } catch (e) {
+    return { message: "※従業員の登録がありません。" };
+  }
+};
+
+export const recordCheckIn = async (data: FormData) => {
+  const employeeName = data.get("employeeName") as string;
+  const now = new Date();
+
+  try {
+    schema.parse({ employeeName });
+    const employee = await prisma.employee.findFirst({
+      where: {
+        name: employeeName,
       },
     });
-
-    revalidatePath("/managements");
-  } else {
-    throw new Error("Employee not found");
+    if (employee) {
+      await prisma.attendanceRecord.create({
+        data: {
+          employeeId: employee.id,
+          startTime: now,
+          endTime: null,
+          date: now,
+        },
+      });
+    } else {
+      throw new Error("Employee is invalided");
+    }
+  } catch (error) {
+    throw new Error("EmployeeName is invalided");
   }
+
+  revalidatePath("/");
 };
 
 export const recordCheckOut = async (data: FormData) => {
