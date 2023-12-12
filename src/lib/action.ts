@@ -2,7 +2,6 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { supabase } from "./supabase";
 import { z } from "zod";
 
 const schema = z.object({
@@ -159,25 +158,6 @@ export const deleteRecord = async (id: number) => {
     },
   });
   revalidatePath("/admin");
-  redirect("/admin");
-};
-
-export const onLogin = async (data: FormData) => {
-  const email = data.get("email") as string;
-  const password = data.get("password") as string;
-  const passwordConf = data.get("passwordConf") as string;
-
-  const { error: signInError } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  });
-  if (password !== passwordConf) {
-    alert("パスワードが一致しません");
-    return;
-  }
-  if (signInError) {
-    throw signInError;
-  }
   redirect("/admin");
 };
 
