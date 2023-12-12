@@ -15,10 +15,20 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { addEmployee } from "@/lib/action";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 const RegisterPage = () => {
   const { toast } = useToast();
+  const [employeeName, setEmployeeName] = useState("");
+  const [employeeEmail, setEmployeeEmail] = useState("");
+  const [employeePhoneNumber, setEmployeePhoneNumber] = useState("");
+  const [employeePosition, setEmployeePosition] = useState("");
+
+  const isFormValid = () => {
+    return (
+      employeeName && employeeEmail && employeePhoneNumber && employeePosition
+    );
+  };
 
   return (
     <main className="gap-4 p-24 h-screen">
@@ -35,6 +45,8 @@ const RegisterPage = () => {
             id="employeeName"
             name="employeeName"
             placeholder="名前を記入"
+            value={employeeName}
+            onChange={(e) => setEmployeeName(e.target.value)}
             required
           />
         </div>
@@ -46,6 +58,8 @@ const RegisterPage = () => {
             id="employeeEmail"
             name="employeeEmail"
             placeholder="メールアドレスを記入"
+            value={employeeEmail}
+            onChange={(e) => setEmployeeEmail(e.target.value)}
             required
           />
         </div>
@@ -57,11 +71,19 @@ const RegisterPage = () => {
             id="employeePhoneNumber"
             name="employeePhoneNumber"
             placeholder="電話番号を記入"
+            value={employeePhoneNumber}
+            onChange={(e) => setEmployeePhoneNumber(e.target.value)}
             required
           />
         </div>
 
-        <Select name="employeePosition">
+        <Select
+          name="employeePosition"
+          required
+          onValueChange={(value) => {
+            setEmployeePosition(value);
+          }}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="雇用形態を選択" />
           </SelectTrigger>
@@ -88,6 +110,12 @@ const RegisterPage = () => {
           onClick={() => {
             toast({
               title: "従業員を登録しました",
+              description: `${employeeName}さんを従業員${employeePosition}として登録しました。`,
+              action: (
+                <ToastAction altText="Add more">
+                  <Link href="/admin/register">Add more </Link>
+                </ToastAction>
+              ),
             });
           }}
           onError={() => {
@@ -98,10 +126,11 @@ const RegisterPage = () => {
               action: <ToastAction altText="Try again">Try again</ToastAction>,
             });
           }}
+          disabled={!isFormValid()}
         >
           従業員を登録する
         </Button>
-        <Link href="/admin">
+        <Link href="/admin/list">
           <Button variant="link">前のページへ戻る</Button>
         </Link>
       </form>
