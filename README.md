@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Working Management App
+
+## Introduction
+
+Welcome to the Working Management App! This simple web application is tailored for managing attendance and break times in a straightforward and efficient manner. It's an ideal tool for anyone who needs to track their work hours, from freelancers and remote workers to small business employees.
+
+## Features
+
+- **Easy Attendance Recording**: Record your start and end times for each workday with just a few clicks.
+- **Break Time Tracking**: Log your break times along with your departure time to ensure accurate calculation of total working hours.
+- **Edit and Delete Records**: Modify or remove your attendance entries as needed.
+- **User-Friendly Interface**: Designed with simplicity in mind, the app allows you to manage your work hours without any complications.
+
+## How It Works
+
+Using the Working Management App is as easy as it gets:
+
+1. **Record Attendance**: Upon starting your workday, log your entry time.
+2. **Log Breaks and Departure**: At the end of the day, record any breaks taken and your departure time.
+3. **Manage Records**: View, edit, or delete previous entries to keep your records up to date.
 
 ## Getting Started
 
-First, run the development server:
+To start managing your work hours today, visit the [Working Management App](https://working-management-app.vercel.app/). No sign-up required! Just open the app and begin tracking your work hours and breaks.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Feedback and Contributions
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Your feedback is invaluable in helping improve the Working Management App. If you have suggestions or would like to contribute to the project, please feel free to reach out. We appreciate your input!
