@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 import React from "react";
 
 type Employee = {
@@ -129,6 +131,30 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
           <p className="text-md">勤務日数: {stat.totalWorkDays}</p>
         </div>
       ))}
+
+      <Table className="text-center">
+        <TableCaption>
+          <Link href={`/admin/employee/${params.id}/edit`}>
+            <Button variant="outline">修正する</Button>
+          </Link>
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-1/4 text-center">名前</TableHead>
+            <TableHead className="w-1/4 text-center">メールアドレス</TableHead>
+            <TableHead className="w-1/4 text-center">電話番号</TableHead>
+            <TableHead className="w-1/4 text-center">雇用形態</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell className="font-medium">{employee.name}</TableCell>
+            <TableCell>{employee.email}</TableCell>
+            <TableCell>{employee.phoneNumber}</TableCell>
+            <TableCell>{employee.position}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
       <div className="w-2/3">
         <Table className="text-center">
           <TableCaption>直近の出退勤リスト</TableCaption>
@@ -142,7 +168,7 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {records.map((record) => (
+            {records.map((record: AttendanceRecord) => (
               <TableRow key={record.id}>
                 <TableCell className="font-medium">
                   {record.date.toLocaleDateString("ja-JP", {

@@ -42,7 +42,7 @@ const EmployeeList = async () => {
             <TableRow key={employee.id}>
               <TableCell className="font-medium">
                 <Link
-                  href={`/employee/${employee.id}`}
+                  href={`/admin/employee/${employee.id}`}
                   className="hover:underline"
                 >
                   {employee.name}

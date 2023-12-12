@@ -141,7 +141,6 @@ export const updateRecord = async (id: number, data: FormData) => {
 
   const parsedStartTime = startTime && new Date(startTime);
   const parsedEndTime = endTime ? new Date(endTime) : null;
-
   const parsedBreakTime = breakTime ? parseInt(breakTime, 10) : null;
 
   await prisma.attendanceRecord.update({
@@ -186,4 +185,36 @@ export const onLogin = async (data: FormData) => {
     throw signInError;
   }
   redirect("/admin");
+};
+
+export const updateEmployee = async (id: string, data: FormData) => {
+  const employeeName = data.get("employeeName") as string;
+  const employeeEmail = data.get("employeeEmail") as string;
+  const employeePhoneNumber = data.get("employeePhoneNumber") as string;
+  const employeePosition = data.get("breakTime") as string;
+
+  await prisma.employee.update({
+    where: {
+      id,
+    },
+    data: {
+      name: employeeName,
+      email: employeeEmail,
+      phoneNumber: employeePhoneNumber,
+      position: employeePosition,
+    },
+  });
+
+  revalidatePath("/admin/list");
+  redirect("/admin/list");
+};
+
+export const deleteEmployee = async (id: string) => {
+  await prisma.employee.delete({
+    where: {
+      id,
+    },
+  });
+  revalidatePath("/admin/list");
+  redirect("/admin/list");
 };
