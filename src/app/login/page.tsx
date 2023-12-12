@@ -1,10 +1,13 @@
+"use client";
+
 import Head from "next/head";
-import { Label } from "@/components/ui/Label";
-import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { onLogin } from "@/lib/action";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import Link from "next/link";
 
 export default function Login() {
   const { toast } = useToast();
@@ -70,6 +73,9 @@ export default function Login() {
               >
                 ログイン
               </Button>
+              <Link href="/" className="py-4">
+                <Button variant="link">ホームへ戻る</Button>
+              </Link>
             </div>
           </form>
         </div>
