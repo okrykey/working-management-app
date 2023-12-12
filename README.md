@@ -21,7 +21,7 @@ Using the Working Management App is as easy as it gets:
 
 ## Getting Started
 
-To start managing your work hours today, visit the [Working Management App](https://working-management-app.vercel.app/). No sign-up required! Just open the app and begin tracking your work hours and breaks.
+To start managing your work hours today, visit the [Working Management App](https://wdaisjd.xyz/). No sign-up required! Just open the app and begin tracking your work hours and breaks.
 
 ## Feedback and Contributions
 
