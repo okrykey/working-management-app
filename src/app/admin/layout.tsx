@@ -1,14 +1,21 @@
+"use client";
+import { FC, ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { redirect } from "next/navigation";
-import { FC, ReactNode } from "react";
 
-/* @ts-expect-error Server Component */
-const Layout: FC<{ children: ReactNode }> = async ({ children }) => {
-  const { data: session } = await supabase.auth.getSession();
+const Layout: FC<{ children: ReactNode }> = ({ children }) => {
+  const router = useRouter();
 
-  if (!session) {
-    redirect("/login");
-  }
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   return <>{children}</>;
 };
