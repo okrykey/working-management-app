@@ -47,6 +47,9 @@ const RecordsTableByDate = async ({
       include: {
         employee: true,
       },
+      orderBy: {
+        startTime: "desc",
+      },
     });
 
   const filteredRecords = attendanceRecords.filter(
@@ -72,18 +75,24 @@ const RecordsTableByDate = async ({
   };
 
   return (
-    <div className="w-2/3">
+    <div className="w-2/3 pb-4">
       <div>
-        <h2 className="text-lg font-bold text-center py-4">
-          {selectedDate
-            ? selectedDate.toLocaleDateString("ja-JP", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-              })
-            : "日付が選択されていません"}
-          の勤怠記録
-        </h2>
+        <Link
+          href={`/admin/records/${
+            selectedDate ? formatDate(selectedDate) : ""
+          }`}
+        >
+          <h2 className="text-lg font-bold text-center py4 hover:underline">
+            {selectedDate
+              ? selectedDate.toLocaleDateString("ja-JP", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                })
+              : "日付が選択されていません"}
+            の勤怠記録
+          </h2>
+        </Link>
       </div>
       {filteredRecords.length > 0 ? (
         <Table className="text-center">
@@ -139,7 +148,7 @@ const RecordsTableByDate = async ({
           </TableBody>
         </Table>
       ) : (
-        <p className="text-center text-gray-500">Not found</p>
+        <div className="pt-4 text-center text-gray-500">Not found</div>
       )}
     </div>
   );

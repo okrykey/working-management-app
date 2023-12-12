@@ -45,7 +45,9 @@ export function ClockOutDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">退勤する</Button>
+        <Button size="lg" variant="outline" className="font-bold text-md">
+          退勤する
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">

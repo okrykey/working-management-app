@@ -15,11 +15,18 @@ import { useToast } from "@/components/ui/use-toast";
 import { recordCheckIn } from "@/lib/action";
 import { useState } from "react";
 import { ToastAction } from "./ui/toast";
+import { useFormState } from "react-dom";
+
+const initialState = {
+  message: null,
+};
 
 export function ClockInDialog() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [employeeName, setEmployeeName] = useState("");
+  const [state, formAction] = useFormState(recordCheckIn, initialState);
+
   const today = new Date();
   const dateString = today.toLocaleDateString("ja-JP", {
     hour: "2-digit",
@@ -47,11 +54,13 @@ export function ClockInDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">出勤する</Button>
+        <Button size="lg" className="font-bold font-lg text-md">
+          出勤する
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
-        <form action={recordCheckIn}>
+        <form action={formAction}>
           <DialogHeader>
             <DialogTitle>出勤登録</DialogTitle>
             <DialogDescription>出勤状態を記入して下さい。</DialogDescription>
@@ -71,6 +80,7 @@ export function ClockInDialog() {
                 value={employeeName}
                 onChange={(e) => setEmployeeName(e.target.value)}
               />
+              {state?.message && <p>{state.message}</p>}
             </div>
           </div>
           <DialogFooter>

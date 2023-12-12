@@ -6,16 +6,23 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center gap-4 p-24">
-      <div>Working Management App</div>
-      <Link href="/managements" className="hover:underline">
-        <Button variant="ghost">出退勤の登録はこちら！</Button>
+      <Link href="/">
+        <h1 className="font-bold text-xl underline">WORKING MANAGEMENT APP</h1>
       </Link>
-      <Link href="/admin">
-        <Button variant="link">管理者ページ</Button>
-      </Link>
+      <div className="flex flex-row gap-4 py-4 ">
+        <Link href="/managements" className="hover:underline">
+          <Button variant="outline" className="font-bold">
+            出退勤の登録
+          </Button>
+        </Link>
+        <Link href="/admin" className="hover:underline">
+          <Button variant="outline" className="font-bold">
+            管理者ページ
+          </Button>
+        </Link>
+      </div>
 
       <Suspense fallback={<p>Loading...</p>}>
-        {/* @ts-expect-error Server Component */}
         <AttendanceRecordsTable />
       </Suspense>
     </main>

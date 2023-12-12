@@ -14,6 +14,7 @@ import {
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { addEmployee } from "@/lib/action";
+import Link from "next/link";
 import React from "react";
 
 const RegisterPage = () => {
@@ -21,7 +22,7 @@ const RegisterPage = () => {
 
   return (
     <main className="gap-4 p-24 h-screen">
-      <div className="text-center">従業員登録画面</div>
+      <div className="text-center font-bold">従業員登録画面</div>
       <form
         className="flex flex-col items-center justify-center gap-8 max-w-xl py-10 m-auto"
         action={addEmployee}
@@ -100,6 +101,9 @@ const RegisterPage = () => {
         >
           従業員を登録する
         </Button>
+        <Link href="/admin">
+          <Button variant="link">前のページへ戻る</Button>
+        </Link>
       </form>
     </main>
   );
