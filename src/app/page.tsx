@@ -9,7 +9,7 @@ export default function Home() {
       <Link href="/">
         <h1 className="font-bold text-xl underline">WORKING MANAGEMENT APP</h1>
       </Link>
-      <div className="flex flex-row gap-4 py-4 ">
+      <div className="flex flex-row gap-4 py-4">
         <Link href="/managements" className="hover:underline">
           <Button variant="outline" className="font-bold">
             出退勤の登録

@@ -12,7 +12,7 @@ const EmployeeListPage = () => {
             WORKING MANAGEMENT APP
           </h1>
         </Link>
-        <div className="flex flex-row items-center gap-4">
+        <div className="flex flex-row items-center gap-4 py-4">
           <h2 className="font-bold ">従業員リスト</h2>
           <Link href="/admin/register" className="py-4">
             <Button size="sm" variant="outline">

@@ -17,7 +17,7 @@ const AdminPage = () => {
         <h1 className="font-bold text-xl underline">WORKING MANAGEMENT APP</h1>
       </Link>
 
-      <Link href="admin/list" className="hover:underline">
+      <Link href="admin/list" className="py-4 hover:underline">
         <Button variant="outline">従業員一覧・登録</Button>
       </Link>
       <p>Check the Date Record</p>

@@ -82,7 +82,7 @@ const RecordsTableByDate = async ({
             selectedDate ? formatDate(selectedDate) : ""
           }`}
         >
-          <h2 className="text-lg font-bold text-center py4 hover:underline">
+          <h2 className="text-lg font-bold text-center hover:underline">
             {selectedDate
               ? selectedDate.toLocaleDateString("ja-JP", {
                   year: "numeric",
