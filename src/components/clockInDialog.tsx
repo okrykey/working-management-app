@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { recordCheckIn, validateEmployeeName } from "@/lib/action";
 import { ToastAction } from "./ui/toast";
 import { useFormState } from "react-dom";
+import { formatInTimeZone, nowInTimeZone } from "@/lib/date";
 
 const initialState = {
   message: null,
@@ -27,12 +28,8 @@ export function ClockInDialog() {
     validateEmployeeName,
     initialState
   );
-  const today = new Date();
-  const dateString = today.toLocaleDateString("ja-JP", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
+  const now = nowInTimeZone();
+  const dateString = formatInTimeZone(now, "yyyy/MM/d HH:mm");
 
   return (
     <Dialog>

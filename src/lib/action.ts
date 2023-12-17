@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { nowInTimeZone } from "./date";
 
 const schema = z.object({
   employeeName: z.string().max(10),
@@ -35,7 +36,7 @@ export const validateEmployeeName = async (
 
 export const recordCheckIn = async (data: FormData) => {
   const employeeName = data.get("employeeName") as string;
-  const now = new Date();
+  const now = nowInTimeZone();
 
   try {
     schema.parse({ employeeName });
@@ -66,7 +67,7 @@ export const recordCheckIn = async (data: FormData) => {
 export const recordCheckOut = async (data: FormData) => {
   const employeeName = data.get("employeeName") as string;
   const breakTime = parseInt(data.get("breakTime") as string);
-  const now = new Date();
+  const now = nowInTimeZone();
 
   const employee = await prisma.employee.findFirst({
     where: {

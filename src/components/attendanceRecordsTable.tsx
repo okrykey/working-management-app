@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatInTimeZone } from "@/lib/date";
 import prisma from "@/lib/prisma";
 
 type Employee = {
@@ -77,26 +78,14 @@ const AttendanceRecordsTable = async () => {
                 {record.employee?.name}
               </TableCell>
               <TableCell className="font-medium">
-                {record.date.toLocaleDateString("ja-JP", {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                })}
+                {formatInTimeZone(record.date, "yyyy/MM/dd")}
               </TableCell>
               <TableCell>
-                {record.startTime.toLocaleTimeString("ja-JP", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })}
+                {formatInTimeZone(record.startTime, "H:mm")}
               </TableCell>
               <TableCell>
                 {record.endTime
-                  ? record.endTime.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })
+                  ? formatInTimeZone(record.endTime, "H:mm")
                   : "-"}
               </TableCell>
               <TableCell>

@@ -7,9 +7,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import prisma from "@/lib/prisma";
-import { format } from "date-fns";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { formatInTimeZone } from "@/lib/date";
 
 type Employee = {
   id: string;
@@ -33,14 +33,11 @@ type ClockInRecordsListProps = {
   selectedDate?: Date;
 };
 
-const formatDate = (date: Date): string => {
-  return format(date, "yyyy-MM-dd");
-};
-
 const RecordsTableByDate = async ({
   selectedDate,
 }: ClockInRecordsListProps) => {
-  const formattedSelectedDate = selectedDate && formatDate(selectedDate);
+  const formattedSelectedDate =
+    selectedDate && formatInTimeZone(selectedDate, "yyyy-MM-dd");
 
   const attendanceRecords: AttendanceRecord[] =
     await prisma.attendanceRecord.findMany({
@@ -53,7 +50,8 @@ const RecordsTableByDate = async ({
     });
 
   const filteredRecords = attendanceRecords.filter(
-    (record) => formatDate(record.date) === formattedSelectedDate
+    (record) =>
+      formatInTimeZone(record.date, "yyyy-MM-dd") === formattedSelectedDate
   );
 
   const calculateWorkingHours = (
@@ -79,16 +77,12 @@ const RecordsTableByDate = async ({
       <div>
         <Link
           href={`/admin/records/${
-            selectedDate ? formatDate(selectedDate) : ""
+            selectedDate ? formatInTimeZone(selectedDate, "yyyy-MM-dd") : ""
           }`}
         >
           <h2 className="text-lg font-bold text-center hover:underline">
             {selectedDate
-              ? selectedDate.toLocaleDateString("ja-JP", {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                })
+              ? formatInTimeZone(selectedDate, "yyyy/MM/dd")
               : "日付が選択されていません"}
             の勤怠記録
           </h2>
@@ -113,19 +107,11 @@ const RecordsTableByDate = async ({
                   {record.employee?.name}
                 </TableCell>
                 <TableCell>
-                  {record.startTime.toLocaleTimeString("ja-JP", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  })}
+                  {formatInTimeZone(record.startTime, "H:mm")}
                 </TableCell>
                 <TableCell>
                   {record.endTime
-                    ? record.endTime.toLocaleTimeString("ja-JP", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: false,
-                      })
+                    ? formatInTimeZone(record.endTime, "H:mm")
                     : "-"}
                 </TableCell>
                 <TableCell>
