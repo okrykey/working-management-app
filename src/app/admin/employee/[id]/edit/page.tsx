@@ -1,3 +1,6 @@
+import Link from "next/link";
+import prisma from "@/lib/prisma";
+import { deleteEmployee, updateEmployee } from "@/lib/action";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,8 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { deleteEmployee, updateEmployee } from "@/lib/action";
-import Link from "next/link";
 
 type Employee = {
   id: string;

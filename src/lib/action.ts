@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { nowInTimeZone } from "./date";
+import { convertTimeZoneToUtc, nowInTimeZone } from "./date";
 
 const schema = z.object({
   employeeName: z.string().max(10),
@@ -133,8 +133,11 @@ export const updateRecord = async (id: number, data: FormData) => {
   const endTime = data.get("endTime") as string;
   const breakTime = data.get("breakTime") as string;
 
-  const parsedStartTime = startTime && new Date(startTime);
-  const parsedEndTime = endTime ? new Date(endTime) : null;
+  const parsedStartTime =
+    startTime && convertTimeZoneToUtc(new Date(startTime));
+  const parsedEndTime = endTime
+    ? convertTimeZoneToUtc(new Date(endTime))
+    : null;
   const parsedBreakTime = breakTime ? parseInt(breakTime, 10) : null;
 
   await prisma.attendanceRecord.update({
