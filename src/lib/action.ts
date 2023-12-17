@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { convertTimeZoneToUtc, nowInTimeZone } from "./date";
+import { convertUtcToTimeZone, nowInTimeZone } from "./date";
 
 const schema = z.object({
   employeeName: z.string().max(10),
@@ -96,14 +96,13 @@ export const recordCheckOut = async (data: FormData) => {
           breakTime: breakTime,
         },
       });
-
-      revalidatePath("/");
     } else {
       throw new Error("Active attendance record not found");
     }
   } else {
     throw new Error("Employee not found");
   }
+  revalidatePath("/");
 };
 
 export const addEmployee = async (data: FormData) => {
@@ -134,9 +133,9 @@ export const updateRecord = async (id: number, data: FormData) => {
   const breakTime = data.get("breakTime") as string;
 
   const parsedStartTime =
-    startTime && convertTimeZoneToUtc(new Date(startTime));
+    startTime && convertUtcToTimeZone(new Date(startTime));
   const parsedEndTime = endTime
-    ? convertTimeZoneToUtc(new Date(endTime))
+    ? convertUtcToTimeZone(new Date(endTime))
     : null;
   const parsedBreakTime = breakTime ? parseInt(breakTime, 10) : null;
 
