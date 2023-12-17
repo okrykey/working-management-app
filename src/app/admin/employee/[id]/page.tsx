@@ -153,20 +153,7 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
             </TableBody>
           </Table>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          {monthlyStats.map((stat) => (
-            <div
-              key={stat.month}
-              className="w-full max-w-xl shadow-sm border border-gray-800 rounded-lg p-4"
-            >
-              <h2 className="text-lg font-semibold">
-                {stat.month}月の稼働記録
-              </h2>
-              <p className="text-md">総稼働時間: {stat.totalWorkingTime}</p>
-              <p className="text-md">勤務日数: {stat.totalWorkDays}</p>
-            </div>
-          ))}
-        </div>
+
         <div className="w-2/3">
           <Table className="text-center">
             <TableCaption>直近の出退勤リスト</TableCaption>
@@ -219,6 +206,20 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
               ))}
             </TableBody>
           </Table>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-4">
+          {monthlyStats.map((stat) => (
+            <div
+              key={stat.month}
+              className="w-full max-w-xl shadow-sm border border-gray-800 rounded-lg p-4"
+            >
+              <h2 className="text-lg font-semibold">
+                {stat.month}月の稼働記録
+              </h2>
+              <p className="text-md">総稼働時間: {stat.totalWorkingTime}</p>
+              <p className="text-md">勤務日数: {stat.totalWorkDays}</p>
+            </div>
+          ))}
         </div>
       </div>
     </main>
