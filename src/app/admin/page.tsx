@@ -3,10 +3,11 @@ import React, { Suspense } from "react";
 import { RecordsTableByDate } from "@/components/recordsTableByDate";
 import { DatePicker } from "@/components/datePicker";
 import { Button } from "@/components/ui/button";
+import { nowInTimeZone } from "@/lib/date";
 
 const AdminPage = async () => {
   const pastSevenDays = Array.from({ length: 3 }, (_, i) => {
-    const date = new Date();
+    const date = nowInTimeZone();
     date.setDate(date.getDate() - i);
     return date;
   });
@@ -24,7 +25,7 @@ const AdminPage = async () => {
       <DatePicker />
       <p>Last 3 days Records</p>
       {pastSevenDays.map((date, index) => (
-        <Suspense key={index}>
+        <Suspense key={index} fallback={<div>Loading...</div>}>
           <RecordsTableByDate selectedDate={date} />
         </Suspense>
       ))}
