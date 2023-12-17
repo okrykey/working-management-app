@@ -1,3 +1,6 @@
+import React from "react";
+import Link from "next/link";
+import prisma from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -8,8 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
-import React from "react";
 
 type Employee = {
   id: string;
