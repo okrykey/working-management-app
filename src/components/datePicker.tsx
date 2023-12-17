@@ -19,13 +19,13 @@ const DatePicker = () => {
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
 
   return (
-    <div className="flex flex-row gap-4">
+    <div className="flex flex-row gap-2">
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
             className={cn(
-              "w-[280px] justify-start text-left font-normal",
+              "w-[203px] justify-start text-left font-normal",
               !date && "text-muted-foreground"
             )}
           >
@@ -48,7 +48,9 @@ const DatePicker = () => {
       </Popover>
       {date ? (
         <Link href={`/admin/records/${formattedDate}`}>
-          <Button>{`${format(date, "yyyy年M月d日")}の勤怠記録`}</Button>
+          <Button variant="outline" className="text-xl">
+            &gt;
+          </Button>
         </Link>
       ) : (
         <></>
