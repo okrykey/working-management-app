@@ -25,7 +25,7 @@ export const validateEmployeeName = async (
   value: string
 ) => {
   try {
-    schema.parse({ EmployeeName: value });
+    schema.parse({ employeeName: value });
     await verifyEmployeeName(value);
     return { message: null };
   } catch (e) {
