@@ -97,7 +97,7 @@ export const recordCheckOut = async (data: FormData) => {
         },
       });
 
-      revalidatePath("/managements");
+      revalidatePath("/");
     } else {
       throw new Error("Active attendance record not found");
     }
