@@ -221,6 +221,9 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
             </div>
           ))}
         </div>
+        <Link href="/admin/list" className="py-4">
+          <Button variant="link">前のページへ戻る</Button>
+        </Link>
       </div>
     </main>
   );
