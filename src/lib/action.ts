@@ -54,14 +54,16 @@ export const recordCheckIn = async (data: FormData) => {
           date: now,
         },
       });
+      revalidatePath("/");
+      redirect("/");
     } else {
       throw new Error("Employee is invalided");
     }
   } catch (error) {
     throw new Error("EmployeeName is invalided");
   }
-
   revalidatePath("/");
+  redirect("/");
 };
 
 export const recordCheckOut = async (data: FormData) => {
@@ -96,6 +98,8 @@ export const recordCheckOut = async (data: FormData) => {
           breakTime: breakTime,
         },
       });
+      revalidatePath("/");
+      redirect("/");
     } else {
       throw new Error("Active attendance record not found");
     }
@@ -103,6 +107,7 @@ export const recordCheckOut = async (data: FormData) => {
     throw new Error("Employee not found");
   }
   revalidatePath("/");
+  redirect("/");
 };
 
 export const addEmployee = async (data: FormData) => {
