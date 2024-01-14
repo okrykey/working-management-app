@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { convertUtcToTimeZone, nowInTimeZone } from "./date";
+import { convertUtcToTimeZone, getJstDateByUtc, nowInTimeZone } from "./date";
 
 const schema = z.object({
   employeeName: z.string().max(10),
@@ -36,7 +36,7 @@ export const validateEmployeeName = async (
 
 export const recordCheckIn = async (data: FormData) => {
   const employeeName = data.get("employeeName") as string;
-  const now = nowInTimeZone();
+  const now = getJstDateByUtc(new Date());
 
   try {
     schema.parse({ employeeName });
@@ -62,8 +62,6 @@ export const recordCheckIn = async (data: FormData) => {
   } catch (error) {
     throw new Error("EmployeeName is invalided");
   }
-  revalidatePath("/");
-  redirect("/");
 };
 
 export const recordCheckOut = async (data: FormData) => {
@@ -106,8 +104,6 @@ export const recordCheckOut = async (data: FormData) => {
   } else {
     throw new Error("Employee not found");
   }
-  revalidatePath("/");
-  redirect("/");
 };
 
 export const addEmployee = async (data: FormData) => {
@@ -197,6 +193,6 @@ export const deleteEmployee = async (id: string) => {
       id,
     },
   });
-  revalidatePath("/admin/list");
+  revalidatePath("/");
   redirect("/admin/list");
 };
