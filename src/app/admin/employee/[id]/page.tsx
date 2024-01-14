@@ -37,6 +37,7 @@ type RecordsGroupedByMonth = {
 const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
   const records = await prisma.attendanceRecord.findMany({
     where: { employeeId: params.id },
+    orderBy: { date: "desc" },
   });
   const employee: Employee | null = await prisma.employee.findUnique({
     where: { id: params.id },
@@ -154,7 +155,7 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
           </Table>
         </div>
 
-        <div className="w-2/3">
+        <div className="w-1/2">
           <Table className="text-center">
             <TableCaption>直近の出退勤リスト</TableCaption>
             <TableHeader>
@@ -164,6 +165,7 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
                 <TableHead className="w-1/5 text-center">退勤時間</TableHead>
                 <TableHead className="w-1/5 text-center">休憩時間</TableHead>
                 <TableHead className="w-1/5 text-center">稼働時間</TableHead>
+                <TableHead className="w-1/5 text-center">編集</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -201,6 +203,11 @@ const EmployeeDetailPage = async ({ params }: { params: { id: string } }) => {
                       record.endTime,
                       record.breakTime
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`/admin/${record.id}/edit`}>
+                      <Button size="sm">修正</Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
