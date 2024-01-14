@@ -51,32 +51,32 @@ const EmployeeEditPage = async ({ params }: { params: { id: string } }) => {
         action={updateEmployeeWithId}
       >
         <div className="grid w-full items-center gap-2">
-          <Label htmlFor="startTime">名前</Label>
+          <Label htmlFor="employeeName">名前</Label>
           <Input
             className="w-full"
             type="text"
-            id="startTime"
-            name="startTime"
+            id="employeeName"
+            name="employeeName"
             defaultValue={employee?.name}
           />
         </div>
         <div className="grid w-full items-center gap-2">
-          <Label htmlFor="endTime">メールアドレス</Label>
+          <Label htmlFor="employeeEmail">メールアドレス</Label>
           <Input
             className="w-full"
             type="email"
-            id="endTime"
-            name="endTime"
+            id="employeeEmail"
+            name="employeeEmail"
             defaultValue={employee?.email}
           />
         </div>
         <div className="grid w-full items-center gap-2">
-          <Label htmlFor="breakTime">電話番号</Label>
+          <Label htmlFor="employeePhoneNumber">電話番号</Label>
           <Input
             className="w-full"
             type="text"
-            id="breakTime"
-            name="breakTime"
+            id="employeePhoneNumber"
+            name="employeePhoneNumber"
             defaultValue={employee?.phoneNumber ? employee?.phoneNumber : ""}
           />
         </div>
@@ -94,7 +94,7 @@ const EmployeeEditPage = async ({ params }: { params: { id: string } }) => {
               <SelectItem value="アルバイト" id="employeePosition">
                 アルバイト
               </SelectItem>
-              <SelectItem value="正社員" id="employeePosition">
+              <SelectItem value="社員" id="employeePosition">
                 社員
               </SelectItem>
               <SelectItem value="契約社員" id="employeePosition">

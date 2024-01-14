@@ -39,7 +39,6 @@ export const recordCheckIn = async (data: FormData) => {
   const now = convertUtcToTimeZone(new Date());
 
   try {
-    schema.parse({ employeeName });
     const employee = await prisma.employee.findFirst({
       where: {
         name: employeeName,
@@ -60,8 +59,6 @@ export const recordCheckIn = async (data: FormData) => {
       throw new Error("Employee is invalided");
     }
   } catch (error) {
-    console.log(error);
-
     throw new Error("EmployeeName is invalided");
   }
 };
@@ -135,11 +132,8 @@ export const updateRecord = async (id: number, data: FormData) => {
   const endTime = data.get("endTime") as string;
   const breakTime = data.get("breakTime") as string;
 
-  const parsedStartTime =
-    startTime && convertUtcToTimeZone(new Date(startTime));
-  const parsedEndTime = endTime
-    ? convertUtcToTimeZone(new Date(endTime))
-    : null;
+  const parsedStartTime = startTime && new Date(startTime);
+  const parsedEndTime = endTime ? new Date(endTime) : null;
   const parsedBreakTime = breakTime ? parseInt(breakTime, 10) : null;
 
   await prisma.attendanceRecord.update({
@@ -171,7 +165,7 @@ export const updateEmployee = async (id: string, data: FormData) => {
   const employeeName = data.get("employeeName") as string;
   const employeeEmail = data.get("employeeEmail") as string;
   const employeePhoneNumber = data.get("employeePhoneNumber") as string;
-  const employeePosition = data.get("breakTime") as string;
+  const employeePosition = data.get("employeePosition") as string;
 
   await prisma.employee.update({
     where: {

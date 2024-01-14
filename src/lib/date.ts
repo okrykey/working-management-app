@@ -1,4 +1,3 @@
-import { add } from "date-fns";
 import { utcToZonedTime, format } from "date-fns-tz";
 
 const timeZone = "Asia/Tokyo";
@@ -8,13 +7,9 @@ export const convertUtcToTimeZone = (date: Date | string): Date => {
 };
 
 export const formatInTimeZone = (date: Date, fmt: string): string => {
-  return format(date, fmt, { timeZone });
+  return format(date, fmt);
 };
 
 export const nowInTimeZone = (): Date => {
   return convertUtcToTimeZone(new Date());
-};
-
-export const getJstDateByUtc = (value: string | Date): Date => {
-  return add(new Date(value), { hours: 9 });
 };
