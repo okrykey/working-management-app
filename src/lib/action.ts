@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { convertUtcToTimeZone, getJstDateByUtc, nowInTimeZone } from "./date";
+import { convertUtcToTimeZone } from "./date";
 
 const schema = z.object({
   employeeName: z.string().max(10),
@@ -36,7 +36,7 @@ export const validateEmployeeName = async (
 
 export const recordCheckIn = async (data: FormData) => {
   const employeeName = data.get("employeeName") as string;
-  const now = getJstDateByUtc(new Date());
+  const now = convertUtcToTimeZone(new Date());
 
   try {
     schema.parse({ employeeName });
@@ -54,12 +54,14 @@ export const recordCheckIn = async (data: FormData) => {
           date: now,
         },
       });
-      revalidatePath("/");
+      revalidatePath("/", "layout");
       redirect("/");
     } else {
       throw new Error("Employee is invalided");
     }
   } catch (error) {
+    console.log(error);
+
     throw new Error("EmployeeName is invalided");
   }
 };
@@ -67,7 +69,7 @@ export const recordCheckIn = async (data: FormData) => {
 export const recordCheckOut = async (data: FormData) => {
   const employeeName = data.get("employeeName") as string;
   const breakTime = parseInt(data.get("breakTime") as string);
-  const now = nowInTimeZone();
+  const now = convertUtcToTimeZone(new Date());
 
   const employee = await prisma.employee.findFirst({
     where: {
@@ -96,7 +98,7 @@ export const recordCheckOut = async (data: FormData) => {
           breakTime: breakTime,
         },
       });
-      revalidatePath("/");
+      revalidatePath("/", "layout");
       redirect("/");
     } else {
       throw new Error("Active attendance record not found");
@@ -120,7 +122,7 @@ export const addEmployee = async (data: FormData) => {
       position: position,
     },
   });
-  revalidatePath("/admin");
+  revalidatePath("/", "layout");
 
   if (!employee) {
     throw new Error("Failed to add employee");
@@ -151,7 +153,7 @@ export const updateRecord = async (id: number, data: FormData) => {
     },
   });
 
-  revalidatePath("/admin");
+  revalidatePath("/", "layout");
   redirect("/admin");
 };
 
@@ -161,7 +163,7 @@ export const deleteRecord = async (id: number) => {
       id,
     },
   });
-  revalidatePath("/admin");
+  revalidatePath("/", "layout");
   redirect("/admin");
 };
 
@@ -183,7 +185,7 @@ export const updateEmployee = async (id: string, data: FormData) => {
     },
   });
 
-  revalidatePath("/admin/list");
+  revalidatePath("/admin", "layout");
   redirect("/admin/list");
 };
 
@@ -193,6 +195,6 @@ export const deleteEmployee = async (id: string) => {
       id,
     },
   });
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   redirect("/admin/list");
 };
