@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { nowInTimeZone } from "@/lib/date";
 
 const AdminPage = async () => {
-  const pastSevenDays = Array.from({ length: 3 }, (_, i) => {
+  const pastThreeDays = Array.from({ length: 3 }, (_, i) => {
     const date = nowInTimeZone();
     date.setDate(date.getDate() - i);
     return date;
@@ -24,7 +24,7 @@ const AdminPage = async () => {
       <p>Check the Date Record</p>
       <DatePicker />
       <p>Last 3 days Records</p>
-      {pastSevenDays.map((date, index) => (
+      {pastThreeDays.map((date, index) => (
         <Suspense key={index} fallback={<div>Loading...</div>}>
           <RecordsTableByDate selectedDate={date} />
         </Suspense>
