@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { formatInTimeZone } from "@/lib/date";
 import prisma from "@/lib/prisma";
+import { calculateWorkingHours } from "@/lib/utils";
 
 type Employee = {
   id: string;
@@ -39,23 +40,6 @@ const AttendanceRecordsTable = async () => {
       },
       take: 10,
     });
-  const calculateWorkingHours = (
-    startTime: Date,
-    endTime: Date | null,
-    breakTime?: number | null
-  ) => {
-    if (!endTime) return "-";
-
-    const start = startTime.getTime();
-    const end = endTime.getTime();
-    const diffInMinutes = (end - start) / (1000 * 60);
-
-    const totalMinutes = Math.round(diffInMinutes - (breakTime || 0));
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    return hours > 0 ? `${hours}時間${minutes}分` : `${minutes}分`;
-  };
 
   return (
     <div className="w-2/3">
