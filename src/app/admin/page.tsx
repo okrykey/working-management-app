@@ -4,13 +4,20 @@ import { RecordsTableByDate } from "@/components/recordsTableByDate";
 import { DatePicker } from "@/components/datePicker";
 import { Button } from "@/components/ui/button";
 import { nowInTimeZone } from "@/lib/date";
+import { getServerSession } from "next-auth/next";
+import { options } from "../options";
+import { redirect } from "next/navigation";
 
 const AdminPage = async () => {
+  const session = await getServerSession(options);
   const pastThreeDays = Array.from({ length: 3 }, (_, i) => {
     const date = nowInTimeZone();
     date.setDate(date.getDate() - i);
     return date;
   });
+  if (!session) {
+    redirect("/login");
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center gap-4 p-24">
