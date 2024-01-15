@@ -4,10 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const router = useRouter();
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const password = (event.target as HTMLFormElement).password.value;
@@ -18,7 +16,7 @@ export default function LoginPage() {
     });
 
     if (!result?.error) {
-      router.push("/admin");
+      window.location.href = "/admin";
     } else {
       console.error(result?.error);
     }
