@@ -44,6 +44,7 @@ export const recordCheckIn = async (data: FormData) => {
         name: employeeName,
       },
     });
+
     if (employee) {
       await prisma.attendanceRecord.create({
         data: {
@@ -54,13 +55,15 @@ export const recordCheckIn = async (data: FormData) => {
         },
       });
       revalidatePath("/", "layout");
-      redirect("/");
     } else {
       throw new Error("Employee is invalided");
     }
   } catch (error) {
+    console.error("Error in recordCheckIn:", error);
     throw new Error("EmployeeName is invalided");
   }
+
+  redirect("/");
 };
 
 export const recordCheckOut = async (data: FormData) => {
