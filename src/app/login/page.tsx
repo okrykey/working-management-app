@@ -32,8 +32,9 @@ export default function LoginPage() {
         onSubmit={handleSignIn}
       >
         <div className="grid w-1/2 items-center gap-2">
-          <Label htmlFor="password">パスワード</Label>
+          <Label htmlFor="passwordInput">パスワード</Label>
           <Input
+            id="passwordInput"
             name="password"
             type="password"
             placeholder="Password"
